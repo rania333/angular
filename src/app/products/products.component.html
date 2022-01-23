@@ -1,0 +1,55 @@
+
+<h1>{{store.name}}</h1>
+
+<img [src]= "store.logo" alt="">
+
+<ul>
+  <li *ngFor="let item of store.branches"> {{item}}</li>
+</ul>
+
+<h3 *ngIf="displayDiscout()">we offer an explicit discount of {{discount}}</h3>
+
+<!--dropdown list-->
+
+<select class="form-select" style="width: 20%;"
+ (change)="handleSelect($any($event.target).value)">
+  <option selected>Open this select menu</option>
+  <option *ngFor="let item of categories" [value]="item.id">
+    {{item.name}}
+  </option>
+</select>
+<br/> <br/> <br/> <br/>
+
+<div class="container" *ngIf="displayTable">
+  <div class="row">
+    <div class="col-3" *ngFor="let item of productList">
+      <div class="card">
+        <img [src]="item.img" alt="" class="card-img-top">
+        <div class="card-body">
+          <h5>productName: {{item.name}}</h5>
+          <p>price: {{item.price}}</p>
+          <p>category: {{item.catID}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/> <br/> <br/>
+<!--input-->
+<!-- <input type="text" placeholder="enter your name" [value]="clientName"> -->
+<button type="button" (click)="handleSubmit()" class="btn btn-secondary">buy</button>
+
+
+<div *ngIf="displayDiv">
+  <h1>thanks</h1>
+</div>
+
+
+<br/>  <br/>  <br/>  <br/>  <br/>  <br/>
+
+<h1>your name is {{clientName}}</h1>
+<input type="text" placeholder="enter your name" [value]="clientName"
+(keyup)="setName($any($event.target).value)"> <br>
+<h5>welcome <span [class.red]='clientName=="rania"'>{{clientName}} </span> </h5>
+
