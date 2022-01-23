@@ -11,29 +11,53 @@
 
 <!--dropdown list-->
 
+<h1>{{selectCatID}}</h1>
 <select class="form-select" style="width: 20%;"
- (change)="handleSelect($any($event.target).value)">
-  <option selected>Open this select menu</option>
+(change)="handleSelect($any($event.target).value)">
+  <!-- <option selected>Open this select menu</option> -->
   <option *ngFor="let item of categories" [value]="item.id">
     {{item.name}}
   </option>
 </select>
-<br/> <br/> <br/> <br/>
 
-<div class="container" *ngIf="displayTable">
-  <div class="row">
-    <div class="col-3" *ngFor="let item of productList">
-      <div class="card">
-        <img [src]="item.img" alt="" class="card-img-top">
-        <div class="card-body">
-          <h5>productName: {{item.name}}</h5>
-          <p>price: {{item.price}}</p>
-          <p>category: {{item.catID}}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<br>
+<p> current date: {{date| date}}</p>
+<p>total price: {{getTotalPrice() | currency: 'USD' : 'symbol'}}</p>
+<br>
+<p>Before pipe: {{idNum}}</p>
+<p>ID Num: {{idNum | customPope : 'FullDate'}}</p>
+<p>Before pipe: {{creditCard}}</p>
+<p>after pipe: {{creditCard | customPipe}}</p>
+<br/> <br/>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>image</th>
+      <th>price</th>
+      <th>category id</th>
+      <th>quantity</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let item of productList">
+      <tr *ngIf="item.quantity != 0" class="col-2"
+      [ngStyle]="{'background-color': item.quantity ==1 ? 'yellow': 'white'}" >
+        <td>{{item.name}}</td>
+        <td><img appProductCardDir  [src]="item.img"></td>
+        <td>{{item.price}}</td>
+        <td>{{item.catID}}</td>
+        <td>{{item.quantity}}</td>
+        <td>
+          <button type="button"
+            class="btn btn-secondary" (click)="decreaseQNT(item)"> decrease</button>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
 
 <br/> <br/> <br/>
 <!--input-->
@@ -50,6 +74,6 @@
 
 <h1>your name is {{clientName}}</h1>
 <input type="text" placeholder="enter your name" [value]="clientName"
-(keyup)="setName($any($event.target).value)"> <br>
-<h5>welcome <span [class.red]='clientName=="rania"'>{{clientName}} </span> </h5>
+[(ngModel)]="clientName"> <br>
+<h5>welcome <span [ngClass]="{'text-warning': clientName.length <= 3 }">{{clientName}} </span> </h5>
 

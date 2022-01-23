@@ -7,6 +7,10 @@ import { HeaderComponent } from './header/header.component';
 import { ProductsComponent } from './products/products.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidemenuComponent } from './sidemenu/sidemenu.component';
+import { FormsModule } from '@angular/forms';
+import { ProductCardDirDirective } from './product-card-dir.directive';
+import { CustomPopePipe } from './custom-pope.pipe';
+import { CustomPipePipe } from './custom-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -14,11 +18,15 @@ import { SidemenuComponent } from './sidemenu/sidemenu.component';
     HeaderComponent,
     ProductsComponent,
     FooterComponent,
-    SidemenuComponent
+    SidemenuComponent,
+    ProductCardDirDirective,
+    CustomPopePipe,
+    CustomPipePipe
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
