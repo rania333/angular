@@ -4,6 +4,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IProducts } from '../viewmodels/iproducts';
 import { Store } from '../viewmodels/store';
 import { ICartItems } from '../viewmodels/icart-items';
+import { ProductServiceService } from '../services/product-service.service';
 
 @Component({
   selector: 'app-products',
@@ -17,23 +18,13 @@ export class ProductsComponent implements OnInit {
   @Output() cartData: EventEmitter<ICartItems>;
   store:Store;
   productList: IProducts[]; //hold array of prods
-  // categories: ICategory[];
   displayTable: Boolean = true;
   displayDiv:Boolean = false;
   allProd: IProducts[];
   selectCatID: number = 0;//da ll 2 way binding
-  constructor() {
+  constructor(private productsService: ProductServiceService) {
     this.cartData = new EventEmitter<ICartItems>();
-    this.productList = [
-      {id: 2, name: 'product2', quantity: 5,
-      price: 200, img: 'https://picsum.photos/150/100/', catID: 3},
-      {id: 3, name: 'product3', quantity: 4,
-      price: 150, img: 'https://picsum.photos/150/100/', catID: 1},
-      {id: 5, name: 'product5', quantity: 4,
-      price: 150, img: 'https://picsum.photos/150/100/', catID: 2},
-      {id: 6, name: 'product6', quantity: 0,
-      price: 150, img: 'https://picsum.photos/150/100/', catID: 2}
-  ];
+    this.productList = this.productsService.getAllProducts();
     this.allProd = [...this.productList]
     this.store = new Store('product1', ['cairo', 'alex'],
     'https://fakeimg.pl/150x100/');
@@ -66,12 +57,9 @@ export class ProductsComponent implements OnInit {
   }
 
   handleSelect(): void {
-    this.productList = this.allProd;
-    if(this.receivedCatID == 0) {
-      this.productList = this.productList;
-    } else {
-    this.productList = this.productList
-    .filter(prod => prod.catID == this.receivedCatID);}
+
+    this.allProd = this.productsService
+    .getProdsForSpecificCat(this.receivedCatID);
   }
   sendToCart(data : ICartItems): void {
     this.cartData.emit(data);
