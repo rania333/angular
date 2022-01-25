@@ -9,10 +9,12 @@
       <th>quantity</th>
       <th>count</th>
       <th></th>
+      <th></th> <!--details-->
+      <th></th> <!--edit-->
     </tr>
   </thead>
   <tbody>
-    <ng-container *ngFor="let item of productList">
+    <ng-container *ngFor="let item of allProd">
       <tr *ngIf="item.quantity != 0" class="col-2"
       [ngStyle]="{'background-color': item.quantity ==1 ? 'yellow': 'white'}" >
         <td>{{item.name}}</td>
@@ -47,6 +49,16 @@
               (click)="sendToCart({productName: item.name,
                 unitPrice: item.price,selectedQuantity: +[refCount.value]})">
                 Add to Cart</button>
+        </td>
+        <td>
+          <button class="btn btn-info" type="button">
+            <a routerLink="/products/{{item.id}}"> Details</a>
+          </button>
+        </td>
+        <td>
+          <button class="btn btn-success" type="button">
+            <a routerLink="/editProd/{{item.id}}"> Edit</a>
+          </button>
         </td>
       </tr>
     </ng-container>

@@ -1,0 +1,18 @@
+<div class="container-fluid mx-auto justify-content-center py-3">
+<h1>Product Details </h1>
+
+<div class="card justify-content-center" style="width: 18rem;">
+  <img [src]= "product?.img" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h2 class="card-title">{{product?.name}}</h2>
+    <h5>Product Quantity: <span class="text-info">{{product?.name}} </span></h5>
+    <h5>Product Price: <span class="text-info">{{product?.price}} </span></h5>
+
+    <div class="btn-group" role="group">
+      <!-- <button type="button" class="btn btn-info" (click)="prev()">Prev</button> -->
+      <button type="button" class="btn btn-secondary" (click)="back()">Back</button>
+      <!-- <button type="button" class="btn btn-info" (click)="nxt()">Next</button> -->
+    </div>
+  </div>
+</div>
+</div>

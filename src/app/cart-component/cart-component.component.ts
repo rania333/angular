@@ -56,7 +56,7 @@ export class CartComponentComponent implements OnInit, AfterViewInit {
     this.orderQnt = order.selectedQuantity;
 
     this.prodFromProductsCom.updateQnt(this.orderName, this.orderQnt);
-
+    this.products = this.products.filter(p => {p.productName != order.productName})
   }
   ngOnInit(): void {
   }

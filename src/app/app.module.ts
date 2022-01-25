@@ -12,6 +12,10 @@ import { ProductCardDirDirective } from './product-card-dir.directive';
 import { CustomPopePipe } from './custom-pope.pipe';
 import { CustomPipePipe } from './custom-pipe.pipe';
 import { CartComponentComponent } from './cart-component/cart-component.component';
+import { AddProdComponentComponent } from './add-prod-component/add-prod-component.component';
+import { EditProdComponentComponent } from './edit-prod-component/edit-prod-component.component';
+import { ProductDetailsComponent } from './product-details/product-details.component';
+import { NotFoundComponentComponent } from './not-found-component/not-found-component.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +27,11 @@ import { CartComponentComponent } from './cart-component/cart-component.componen
     ProductCardDirDirective,
     CustomPopePipe,
     CustomPipePipe,
-    CartComponentComponent
+    CartComponentComponent,
+    AddProdComponentComponent,
+    EditProdComponentComponent,
+    ProductDetailsComponent,
+    NotFoundComponentComponent
   ],
   imports: [
     BrowserModule,
