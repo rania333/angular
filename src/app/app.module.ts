@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductCardDirDirective } from './product-card-dir.directive';
 import { CustomPopePipe } from './custom-pope.pipe';
 import { CustomPipePipe } from './custom-pipe.pipe';
+import { CartComponentComponent } from './cart-component/cart-component.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CustomPipePipe } from './custom-pipe.pipe';
     SidemenuComponent,
     ProductCardDirDirective,
     CustomPopePipe,
-    CustomPipePipe
+    CustomPipePipe,
+    CartComponentComponent
   ],
   imports: [
     BrowserModule,

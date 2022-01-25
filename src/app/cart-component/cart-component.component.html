@@ -1,0 +1,57 @@
+<!--dropdown list-->
+
+<select class="form-select" style="width: 20%;" [(ngModel)]="selectCatID">
+  <option value="0" selected>all</option>
+  <option *ngFor="let item of categories" [value]="item.id">
+    {{item.name}}
+  </option>
+</select>
+
+&nbsp;
+<div class="d-flex">
+  <input type="number" placeholder="Min Price?"
+  [(ngModel)]="minPrice" class="form-control w-25">
+</div>
+
+<app-products [receivedCatID]="selectCatID" [receviedMinPrice]="minPrice"
+(cartData)="onCart($event)"></app-products>
+
+<hr>
+<hr>
+<h1>My Cart</h1>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#No</th>
+      <th>name</th>
+      <th>price</th>
+      <th>selected count</th> <!--da input-->
+      <th>total price</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let item of products; let i = index">
+      <tr>
+        <td>{{i+1}}</td>
+        <td>{{item.productName}}</td>
+        <td>{{item.unitPrice}}</td>
+        <td>
+          <input type="number" #refCount value={{item.selectedQuantity}}
+          class="form-control w-25" (change)="calcTotalPrice(item, +refCount.value)">
+        </td>
+        <td>{{item.unitPrice * item.selectedQuantity}}</td>
+        <td>
+          <button class="btn btn-info"
+              type="button" (click)="calcAllOrderPrice(item)">order</button>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>
+
+
+<hr>
+<hr>
+<h1>Total price <span class="text-danger">{{totalOrderPrice | currency}}</span></h1>
