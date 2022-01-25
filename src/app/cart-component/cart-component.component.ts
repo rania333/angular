@@ -1,4 +1,5 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ProductsComponent } from '../products/products.component';
 import { ICartItems } from '../viewmodels/icart-items';
 import { ICategory } from './../viewmodels/icategory';
 
@@ -7,16 +8,23 @@ import { ICategory } from './../viewmodels/icategory';
   templateUrl: './cart-component.component.html',
   styleUrls: ['./cart-component.component.scss']
 })
-export class CartComponentComponent implements OnInit {
+export class CartComponentComponent implements OnInit, AfterViewInit {
   categories: ICategory[];
   selectCatID: number= 0; //two way bindng
   products: ICartItems[];
   totalOrderPrice: number = 0;
   minPrice: number = 0 ; //da ll filter
+  orderName: string = "";
+  orderQnt: number = 0;
+  //viewChilds
+  @ViewChild(ProductsComponent) prodFromProductsCom !: ProductsComponent;
   constructor() {
     this.categories = [{id: 1, name:'category1'},
     {id: 2, name:'category2'}, {id: 3, name:'category3'}]
     this.products = [];
+  }
+  ngAfterViewInit(): void {
+    // this.prodFromProductsCom.updateQnt(this.orderName, this.orderQnt);
   }
 
   onCart(data: ICartItems): void {
@@ -43,8 +51,13 @@ export class CartComponentComponent implements OnInit {
   calcAllOrderPrice(order: ICartItems) : void {
     let totalPricePerItem = order.unitPrice * order.selectedQuantity;
     this.totalOrderPrice += totalPricePerItem;
+    //for viewChild
+    this.orderName = order.productName;
+    this.orderQnt = order.selectedQuantity;
+
+    this.prodFromProductsCom.updateQnt(this.orderName, this.orderQnt);
+
   }
   ngOnInit(): void {
   }
-
 }

@@ -85,6 +85,16 @@ export class ProductsComponent implements OnInit {
     .filter(prod => prod.price >= this.receviedMinPrice);
     }
   }
+  updateQnt(prodName: string, qnt: number): void {
+    let product = this.productList.find(p => p.name == prodName);
+    if(product != undefined) {
+      this.productList.map(prod => {
+        if(prod.name == prodName) {
+          prod.quantity -= qnt;
+        }
+      })
+    }
+  }
   ngOnChanges(): void {
     this.handleSelect();
     this.handleFilterByPrice();
