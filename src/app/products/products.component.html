@@ -1,35 +1,4 @@
 
-<h1>{{store.name}}</h1>
-
-<img [src]= "store.logo" alt="">
-
-<ul>
-  <li *ngFor="let item of store.branches"> {{item}}</li>
-</ul>
-
-<h3 *ngIf="displayDiscout()">we offer an explicit discount of {{discount}}</h3>
-
-<!--dropdown list-->
-
-<h1>{{selectCatID}}</h1>
-<select class="form-select" style="width: 20%;"
-(change)="handleSelect($any($event.target).value)">
-  <!-- <option selected>Open this select menu</option> -->
-  <option *ngFor="let item of categories" [value]="item.id">
-    {{item.name}}
-  </option>
-</select>
-
-<br>
-<p> current date: {{date| date}}</p>
-<p>total price: {{getTotalPrice() | currency: 'USD' : 'symbol'}}</p>
-<br>
-<p>Before pipe: {{idNum}}</p>
-<p>ID Num: {{idNum | customPope : 'FullDate'}}</p>
-<p>Before pipe: {{creditCard}}</p>
-<p>after pipe: {{creditCard | customPipe}}</p>
-<br/> <br/>
-
 <table class="table table-striped">
   <thead>
     <tr>
@@ -38,6 +7,7 @@
       <th>price</th>
       <th>category id</th>
       <th>quantity</th>
+      <th>count</th>
       <th></th>
     </tr>
   </thead>
@@ -49,31 +19,38 @@
         <td><img appProductCardDir  [src]="item.img"></td>
         <td>{{item.price}}</td>
         <td>{{item.catID}}</td>
-        <td>{{item.quantity}}</td>
         <td>
-          <button type="button"
-            class="btn btn-secondary" (click)="decreaseQNT(item)"> decrease</button>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <button class="btn btn-outline-secondary"
+              type="button" (click)="decreaseQNT(item)">
+                -</button>
+            </div>
+            <div class="mx-3">{{item.quantity}}</div>
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary"
+              type="button" (click)="increaseQNT(item)">
+                +</button>
+            </div>
+          </div>
+        </td>
+
+        <td>
+          <input type="number" #refCount placeholder="count?"
+          class="form-control w-50" min={{1}} max={{item.quantity}}>
+          <!-- [ngStyle]="{'background-color': (+refCount.value)>(item.quantity) ? 'red' : 'white'}"> -->
+        </td>
+        <td>
+          <button class="btn btn-info"
+              type="button"
+              (click)="sendToCart({productName: item.name,
+                unitPrice: item.price,selectedQuantity: +[refCount.value]})">
+                Add to Cart</button>
         </td>
       </tr>
     </ng-container>
   </tbody>
 </table>
 
-<br/> <br/> <br/>
-<!--input-->
-<!-- <input type="text" placeholder="enter your name" [value]="clientName"> -->
-<button type="button" (click)="handleSubmit()" class="btn btn-secondary">buy</button>
-
-
-<div *ngIf="displayDiv">
-  <h1>thanks</h1>
-</div>
-
-
-<br/>  <br/>  <br/>  <br/>  <br/>  <br/>
-
-<h1>your name is {{clientName}}</h1>
-<input type="text" placeholder="enter your name" [value]="clientName"
-[(ngModel)]="clientName"> <br>
-<h5>welcome <span [ngClass]="{'text-warning': clientName.length <= 3 }">{{clientName}} </span> </h5>
 

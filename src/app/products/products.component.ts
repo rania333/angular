@@ -1,8 +1,9 @@
 import { ICategory } from './../viewmodels/icategory';
 import { DiscountOffers } from './../viewmodels/discount-offers';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IProducts } from '../viewmodels/iproducts';
 import { Store } from '../viewmodels/store';
+import { ICartItems } from '../viewmodels/icart-items';
 
 @Component({
   selector: 'app-products',
@@ -10,31 +11,23 @@ import { Store } from '../viewmodels/store';
   styleUrls: ['./products.component.scss']
 })
 export class ProductsComponent implements OnInit {
+  @Input() receivedCatID: number = 0;
+  @Input() receviedMinPrice: number =0; //for filter
+  //send to cart
+  @Output() cartData: EventEmitter<ICartItems>;
   store:Store;
-  clientName: string;
-  productList: IProducts[];
-  discount: DiscountOffers;
-  categories: ICategory[];
+  productList: IProducts[]; //hold array of prods
+  // categories: ICategory[];
   displayTable: Boolean = true;
   displayDiv:Boolean = false;
   allProd: IProducts[];
   selectCatID: number = 0;//da ll 2 way binding
-  date: Date;
-  idNum: number = 29906015986325;
-  creditCard: number = 12345698254532;
   constructor() {
-    this.clientName = 'rania';
-    this.discount = DiscountOffers.noDiscount;
-    this.categories = [{id: 1, name:'category1'},
-    {id: 2, name:'category2'}, {id: 3, name:'category3'}]
+    this.cartData = new EventEmitter<ICartItems>();
     this.productList = [
-      {id: 1, name: 'product1', quantity: 1,
-      price: 100, img: 'https://picsum.photos/150/100/', catID: 2},
       {id: 2, name: 'product2', quantity: 5,
       price: 200, img: 'https://picsum.photos/150/100/', catID: 3},
       {id: 3, name: 'product3', quantity: 4,
-      price: 150, img: 'https://picsum.photos/150/100/', catID: 1},
-      {id: 4, name: 'product4', quantity: 1,
       price: 150, img: 'https://picsum.photos/150/100/', catID: 1},
       {id: 5, name: 'product5', quantity: 4,
       price: 150, img: 'https://picsum.photos/150/100/', catID: 2},
@@ -44,26 +37,6 @@ export class ProductsComponent implements OnInit {
     this.allProd = [...this.productList]
     this.store = new Store('product1', ['cairo', 'alex'],
     'https://fakeimg.pl/150x100/');
-    this.date = new Date();
-  }
-
-  displayDiscout(): Boolean {
-    if(this.discount == 'No Discount') {
-      return false
-    }
-    return true;
-  }
-
-  handleSubmit(): void {
-    this.displayTable = !this.displayTable;
-    this.displayDiv = !this.displayDiv;
-  }
-  handleSelect(param:any): void {
-    this.productList = this.allProd;
-    this.productList = this.productList.filter(prod => prod.catID == +param);
-  }
-  setName(name: any) {
-    this.clientName = name;
   }
 
   decreaseQNT(prod: IProducts): void {
@@ -74,7 +47,13 @@ export class ProductsComponent implements OnInit {
     })
   }
 
-
+  increaseQNT(prod: IProducts): void {
+    this.productList.map(p => {
+      if(p == prod) {
+        p.quantity += 1;
+      }
+    })
+  }
   getTotalPrice(): number {
     let total: number = 0;
     this.productList.map(p => {
@@ -83,13 +62,31 @@ export class ProductsComponent implements OnInit {
     return total;
   }
 
-  getProducts(): any {
-    this.productList = this.allProd;
-    return this.productList = this.productList.filter(p => {
-      p.catID == this.selectCatID
-    })
-  }
   ngOnInit(): void {
   }
 
+  handleSelect(): void {
+    this.productList = this.allProd;
+    if(this.receivedCatID == 0) {
+      this.productList = this.productList;
+    } else {
+    this.productList = this.productList
+    .filter(prod => prod.catID == this.receivedCatID);}
+  }
+  sendToCart(data : ICartItems): void {
+    this.cartData.emit(data);
+  }
+  handleFilterByPrice(): void {
+    this.productList = this.allProd;
+    if(this.receviedMinPrice == 0) {
+      this.productList = this.productList;
+    } else {
+      this.productList = this.productList
+    .filter(prod => prod.price >= this.receviedMinPrice);
+    }
+  }
+  ngOnChanges(): void {
+    this.handleSelect();
+    this.handleFilterByPrice();
+  }
 }
