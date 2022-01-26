@@ -1,17 +1,19 @@
+import { Observable, Subscription } from 'rxjs';
 import { ICategory } from './../viewmodels/icategory';
 import { DiscountOffers } from './../viewmodels/discount-offers';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IProducts } from '../viewmodels/iproducts';
 import { Store } from '../viewmodels/store';
 import { ICartItems } from '../viewmodels/icart-items';
 import { ProductServiceService } from '../services/product-service.service';
+import { AdsServicesService } from '../services/ads-services.service';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss']
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy {
   @Input() receivedCatID: number = 0;
   @Input() receviedMinPrice: number =0; //for filter
   //send to cart
@@ -22,7 +24,12 @@ export class ProductsComponent implements OnInit {
   displayDiv:Boolean = false;
   allProd: IProducts[];
   selectCatID: number = 0;//da ll 2 way binding
-  constructor(private productsService: ProductServiceService) {
+  //day5
+  currentAds: string = '';
+  adsExist: boolean = true;
+  adsObserver!: Subscription;
+  constructor(private productsService: ProductServiceService,
+    private adsService: AdsServicesService) {
     this.cartData = new EventEmitter<ICartItems>();
     this.productList = this.productsService.getAllProducts();
     this.allProd = [...this.productList]
@@ -51,9 +58,6 @@ export class ProductsComponent implements OnInit {
       total += p.price
     })
     return total;
-  }
-
-  ngOnInit(): void {
   }
 
   handleSelect(): void {
@@ -87,4 +91,17 @@ export class ProductsComponent implements OnInit {
     this.handleSelect();
     this.handleFilterByPrice();
   }
+
+  ngOnInit(): void {
+    this.adsObserver = this.adsService.getAllAds(2).subscribe({
+      next: (data) => { this.currentAds = data},
+      complete: () => {this.adsExist = false},
+      error: (err) => {this.adsExist = false}
+    })
+  }
+
+  ngOnDestroy(): void {
+      this.adsObserver.unsubscribe();
+  }
+
 }

@@ -16,6 +16,7 @@ import { AddProdComponentComponent } from './add-prod-component/add-prod-compone
 import { EditProdComponentComponent } from './edit-prod-component/edit-prod-component.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { NotFoundComponentComponent } from './not-found-component/not-found-component.component';
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { NotFoundComponentComponent } from './not-found-component/not-found-comp
     AddProdComponentComponent,
     EditProdComponentComponent,
     ProductDetailsComponent,
-    NotFoundComponentComponent
+    NotFoundComponentComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

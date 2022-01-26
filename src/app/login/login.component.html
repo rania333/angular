@@ -1,0 +1,16 @@
+
+<h1 class="text-center text-info py-3">Login</h1>
+
+<form class="container-fluid w-50 py-5">
+  <div class="mb-3">
+    <label for="name" class="form-label">UserName</label>
+    <input type="text" class="form-control" id="name" #nameRef>
+  </div>
+  <div class="mb-3">
+    <label for="pass" class="form-label"> Password</label>
+    <input type="text" class="form-control" id="pass" #passRef>
+  </div>
+  <button type="submit" class="btn btn-primary w-25"
+  (click)="login(nameRef.value, passRef.value)" [disabled]="isLogged">Login</button>
+
+</form>
