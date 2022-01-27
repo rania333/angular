@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -8,8 +9,9 @@ import { AuthService } from '../services/auth.service';
 })
 export class HeaderComponent implements OnInit {
   userName: string = '';
-
-  constructor(private authService: AuthService) {
+  confirmLogout: boolean = false;
+  constructor(private authService: AuthService,
+              private router: Router) {
     this.userName = this.authService.getUserName();
   }
 
@@ -24,6 +26,7 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
+    this.router.navigate(['/products']);
   }
 
 }

@@ -7,11 +7,12 @@ import { AddProdComponentComponent } from './add-prod-component/add-prod-compone
 import { EditProdComponentComponent } from './edit-prod-component/edit-prod-component.component';
 import { NotFoundComponentComponent } from './not-found-component/not-found-component.component';
 import { LoginComponent } from './login/login.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {path: '', redirectTo: '/products', pathMatch: 'full'},
   {path: 'products', component: ProductsComponent},
-  {path: 'order', component: CartComponentComponent},
+  {path: 'order', component: CartComponentComponent, canActivate:[AuthGuard]},
   {path: 'products/:id', component: ProductDetailsComponent},
   {path: 'addProd', component: AddProdComponentComponent},
   {path: 'editProd/:id', component: EditProdComponentComponent},

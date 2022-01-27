@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -11,7 +11,9 @@ export class LoginComponent implements OnInit {
   userName: string;
   // pass: string = '';
   isLogged: boolean = false;
-  constructor(private authService: AuthService, private router:Router) {
+  returnUrl: string = '';
+  constructor(private authService: AuthService, private router:Router,
+              private activatedRoute: ActivatedRoute) {
     this.userName = '';
   }
 
@@ -22,7 +24,9 @@ export class LoginComponent implements OnInit {
       this.authService.login(uName, pass);
       this.userName = this.authService.getUserName();
       this.isLogged = this.authService.isLogged();
-      this.router.navigate(['/products'])
+      this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
+      this.router.navigate([this.returnUrl]);
+
     }
   }
 
