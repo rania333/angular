@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductServiceService } from '../services/product-service.service';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { CategoriesService } from '../services/categories.service';
 
 @Component({
   selector: 'app-edit-prod-component',
@@ -11,35 +12,53 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./edit-prod-component.component.scss']
 })
 export class EditProdComponentComponent implements OnInit {
-  categories: ICategory[];
-  product!: IProducts | null ;
+  categories: ICategory[] = [];
+  // product!: IProducts | null ;
+  product: IProducts = {} as IProducts;
+
+  add: boolean = false
   constructor( private activatedRoute: ActivatedRoute,
-    private prodSer: ProductServiceService, private location: Location) {
-    this.categories = [{id: 1, name:'category1'},
-    {id: 2, name:'category2'}, {id: 3, name:'category3'}]
+    private prodSer: ProductServiceService, private location: Location,
+    private catSer: CategoriesService) {
   }
 
   ngOnInit(): void {
+    //categories
+    this.catSer.getAllCategories().subscribe(data=>{
+      this.categories = data;
+    })
     this.activatedRoute.paramMap.subscribe(param => {
       let id = Number(param.get('id'));
-      let specificProd = this.prodSer.getProdByID(id);
-      this.product = specificProd;
+      console.log("myid", id);
+      if(id == 0) {
+        this.add = true;
+      } else {
+        this.prodSer.getProdByID(id).subscribe(data => {
+          this.product = data
+        })
+      }
     })
   }
 
-  EditProd(data :any[]): void {
-    let [name, qnt, price, imgUrl, catID] = data;
+  EditProd(): void {
+    // let [name, qnt, price, imgUrl, catID] = data;
     this.activatedRoute.paramMap.subscribe(param => {
       let id2 = Number(param.get('id'));
-      this.prodSer.EditProduct
-      ( id2, {id: id2, name, quantity: qnt, price, img: imgUrl, catID})
-    })
-    //redirect
-    this.location.back();
-  }
+      this.prodSer.EditProduct(id2, this.product)
+        .subscribe(data => {
+          console.log(data);
+              //redirect
+              this.location.back();
+            })
+          })
+        }
 
-  removeProd() : void {
-
-  }
-
+    addProd(): void {
+      this.prodSer
+      .addProduct(this.product)
+      .subscribe(prods => {
+        alert('added Successfully');
+        this.location.back();
+      })
+    }
 }

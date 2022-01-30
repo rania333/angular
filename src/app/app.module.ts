@@ -17,6 +17,7 @@ import { EditProdComponentComponent } from './edit-prod-component/edit-prod-comp
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { NotFoundComponentComponent } from './not-found-component/not-found-component.component';
 import { LoginComponent } from './login/login.component';
+import {HttpClientModule} from '@angular/common/http'
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { LoginComponent } from './login/login.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
