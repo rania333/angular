@@ -11,6 +11,7 @@
       <th></th>
       <th></th> <!--details-->
       <th></th> <!--edit-->
+      <th></th> <!--delete-->
     </tr>
   </thead>
   <tbody>
@@ -60,9 +61,46 @@
             <a routerLink="/editProd/{{item.id}}"> Edit</a>
           </button>
         </td>
+        <td>
+          <button class="btn btn-danger" type="button"
+          (click) ="setId(item.id)"
+          data-bs-toggle="modal" data-bs-target="#exampleModal2">
+            Delete
+          </button>
+        </td>
+        <input hidden #refid [value]="item.id" />
       </tr>
     </ng-container>
   </tbody>
 </table>
 
 
+<div class="row" *ngIf="adsExist">
+  <div class="border col-2">
+    <h1 class="text-danger">Sales</h1>
+    <hr>
+    <p>{{currentAds}}</p>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal2"
+tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure to Delete this Product?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary"
+        data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary"
+        (click)="DeleteProduct(currentId)" data-bs-dismiss="modal">confirm</button>
+      </div>
+    </div>
+  </div>
+</div>

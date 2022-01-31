@@ -1,71 +1,55 @@
+import { environment } from './../../environments/environment';
 import { IProducts } from './../viewmodels/iproducts';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductServiceService {
-  private productList: IProducts[]
-  constructor() {
-    this.productList = [
-      {id: 2, name: 'product2', quantity: 5,
-      price: 200, img: 'https://picsum.photos/150/100/', catID: 3},
-      {id: 3, name: 'product3', quantity: 4,
-      price: 150, img: 'https://picsum.photos/150/100/', catID: 1},
-      {id: 5, name: 'product5', quantity: 4,
-      price: 150, img: 'https://picsum.photos/150/100/', catID: 2},
-      {id: 6, name: 'product6', quantity: 0,
-      price: 150, img: 'https://picsum.photos/150/100/', catID: 2}
-    ]
+  httpOption;
+  url = 'http://localhost:3000/products';
+  constructor(private _httpClient: HttpClient) {
+    this.httpOption = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
   }
 
-  getAllProducts(): IProducts[] {
-    return this.productList
+  getAllProducts(): Observable<IProducts[]> {
+    return this._httpClient.get<IProducts[]>(this.url);
   }
-
-  getProdsForSpecificCat(catID: number): IProducts[] {
+  getProdsForSpecificCat(catID: number): Observable<IProducts[]> {
     if(catID == 0) {
-      return this.productList;
+      return this._httpClient.get<IProducts[]>(this.url) ;
     } else {
-      let specificProds = this.productList.filter(prod => prod.catID == catID);
+      let specificProds = this._httpClient
+      .get<IProducts[]>(`${this.url}?catID=${catID}`)
       return specificProds;
     }
   }
 
-  getProdByID(prodID: number) : IProducts | null {
-    let product = this.productList.find(prod => prod.id == prodID);
-    if(product != undefined) {
-      return product
-    } else {
-      return null;
-    }
+  getProdByID(prodID: number) : Observable<IProducts> {
+    let prod = this._httpClient.get<IProducts>(`http://localhost:3000/products/${prodID}`);
+      return prod
   }
 
-  addProduct(prod: IProducts): void {
-    this.productList.push(prod);
+  addProduct(prod: IProducts): Observable<IProducts> {
+    return this._httpClient.post<IProducts>(`${this.url}`, JSON.stringify(prod),
+    this.httpOption)
   }
 
-  EditProduct(prodID: number, newData: IProducts): void {
+  EditProduct(prodID: number, newData: IProducts): Observable<IProducts> {
     //if product exist
-    let productIsExist = this.productList.find(prod => prod.id == prodID);
-    if(productIsExist != undefined) {
-      this.productList.map(p => {
-        if(p.id == prodID) {
-          //override values
-          p.name = newData.name;
-          p.price = newData.price;
-          p.quantity = newData.quantity;
-          p.catID = newData.catID;
-          p.img = newData.img;
-        }
-      })
-    } else {
-      alert('product not exist');
-    }
+    return this._httpClient.
+    put<IProducts>(`${this.url}/${prodID}`,JSON.stringify(newData),this.httpOption);
   }
 
-  removeProduct(prodID: number) : void {
-    this.productList.filter(product => product.id != prodID);
+  removeProduct(prodID: number) : Observable<IProducts> {
+    return this._httpClient.delete<IProducts>(`${this.url}/${prodID}`)
+    // this.productList.filter(product => product.id != prodID);
   }
 
 

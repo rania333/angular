@@ -1,36 +1,60 @@
 
-
-
-<h1 class="text-center text-info py-3">Edit Product</h1>
+<h1 class="text-center text-info py-3">{{add? 'Add Product' :'Edit Product' }}</h1>
 <!-- product -->
-<form class="container-fluid w-50 py-5">
+<form #formRef="ngForm" class="container-fluid w-50 py-5" (ngSubmit)="add? addProd() : EditProd()">
   <div class="mb-3">
     <label for="name" class="form-label">Product Name</label>
-    <input type="text" class="form-control" id="name" [value]="product?.name" #nameRef>
+    <input type="text" class="form-control" id="name"
+    [value]="product?.name" #nameRef="ngModel" name ="name" [(ngModel)]="product.name"
+    [ngModelOptions]="{standalone: true}" required minlength="5"/>
+    <div class="alert alert-warning" [hidden]="nameRef.valid || nameRef.untouched">
+      <small *ngIf="nameRef.errors?.['required']"> Name is required</small>
+      <small *ngIf="nameRef.errors?.['minlength']"> Name must be 5 letters at least</small>
+    </div>
   </div>
   <div class="mb-3">
     <label for="qnt" class="form-label"> Product Quantity</label>
-    <input type="number" class="form-control" id="qnt" [value]="product?.quantity" #qntRef>
+    <input type="number" class="form-control" id="qnt"
+    [value]="product?.quantity" #qntRef="ngModel" name ="name" [(ngModel)]="product.quantity"
+    [ngModelOptions]="{standalone: true}" required min="1" max="5"/>
+    <div class="alert alert-warning" [hidden]="qntRef.valid || qntRef.untouched">
+      <small *ngIf="qntRef.errors?.['required']"> Quantity is required</small>
+      <small *ngIf="qntRef.errors?.['min']"> Quantity must be 1 at least</small>
+      <small *ngIf="qntRef.errors?.['max']"> Quantity must be 5 at most</small>
+    </div>
   </div>
   <div class="mb-3">
     <label for="price" class="form-label">Product Price</label>
-    <input type="number" class="form-control" id="price" [value]="product?.price" #priceRef>
+    <input type="number" class="form-control" id="price"
+    [value]="product?.price" #priceRef="ngModel" [(ngModel)]="product.price"
+    [ngModelOptions]="{standalone: true}" required min="1"/>
+    <div class="alert alert-warning" [hidden]="priceRef.valid || priceRef.untouched">
+      <small *ngIf="priceRef.errors?.['required']"> Price is required</small>
+      <small *ngIf="priceRef.errors?.['min']"> Price shouldn't be nagative value</small>
+    </div>
   </div>
   <div class="mb-3">
     <label for="img" class="form-label">Product ImageUrl</label>
-    <input type="text" class="form-control" id="img" [value]="product?.img"
-    #imgRef>
+    <input type="text" class="form-control" id="img"
+    [value]="product?.img"
+    #imgRef [(ngModel)]="product.img"
+    [ngModelOptions]="{standalone: true}"/>
   </div>
 
   <div class="mb-3">
     <label for="cat" class="form-label">Category Name</label>
     <!--dropdown list-->
-    <select class="form-select" style="width: 20%;" #catRef>
+    <select class="form-select" style="width: 20%;" #catRef="ngModel"
+    [(ngModel)]="product.catID"
+    [ngModelOptions]="{standalone: true}" required>
+    <option value="0" selected>all</option>
       <option *ngFor="let item of categories" [value]="item.id">
         {{item.name}}
       </option>
     </select>
+    <div class="alert alert-warning" [hidden]="catRef.valid || catRef.untouched">
+      <small *ngIf="catRef.errors?.['required']"> Category is required</small>
+    </div>
   </div>
-  <button type="submit" class="btn btn-primary w-50"
-  (click)="EditProd([nameRef.value, qntRef.value, priceRef.value, imgRef.value, catRef.value])">Edit</button>
+  <button type="submit" class="btn btn-primary w-50">{{add? 'Add': 'Edit'}}</button>
 </form>

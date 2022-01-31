@@ -1,10 +1,12 @@
+import { Observable, Subscription } from 'rxjs';
 import { ICategory } from './../viewmodels/icategory';
 import { DiscountOffers } from './../viewmodels/discount-offers';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IProducts } from '../viewmodels/iproducts';
 import { Store } from '../viewmodels/store';
 import { ICartItems } from '../viewmodels/icart-items';
 import { ProductServiceService } from '../services/product-service.service';
+import { AdsServicesService } from '../services/ads-services.service';
 
 @Component({
   selector: 'app-products',
@@ -17,15 +19,20 @@ export class ProductsComponent implements OnInit {
   //send to cart
   @Output() cartData: EventEmitter<ICartItems>;
   store:Store;
-  productList: IProducts[]; //hold array of prods
+  productList: IProducts[] = []; //hold array of prods
   displayTable: Boolean = true;
   displayDiv:Boolean = false;
-  allProd: IProducts[];
+  allProd: IProducts[] = [];
   selectCatID: number = 0;//da ll 2 way binding
-  constructor(private productsService: ProductServiceService) {
+  currentId: number= 0;
+  //day5
+  currentAds: string = '';
+  adsExist: boolean = true;
+  adsObserver!: Subscription;
+  constructor(private productsService: ProductServiceService,
+    private adsService: AdsServicesService) {
     this.cartData = new EventEmitter<ICartItems>();
-    this.productList = this.productsService.getAllProducts();
-    this.allProd = [...this.productList]
+
     this.store = new Store('product1', ['cairo', 'alex'],
     'https://fakeimg.pl/150x100/');
   }
@@ -53,13 +60,11 @@ export class ProductsComponent implements OnInit {
     return total;
   }
 
-  ngOnInit(): void {
-  }
-
   handleSelect(): void {
-
-    this.allProd = this.productsService
-    .getProdsForSpecificCat(this.receivedCatID);
+    this.productsService.getProdsForSpecificCat(this.receivedCatID)
+    .subscribe(prods => {
+      this.allProd = prods;
+    })
   }
   sendToCart(data : ICartItems): void {
     this.cartData.emit(data);
@@ -87,4 +92,33 @@ export class ProductsComponent implements OnInit {
     this.handleSelect();
     this.handleFilterByPrice();
   }
+
+  ngOnInit(): void {
+    // this.adsObserver = this.adsService.getAllAds(2).subscribe({
+    //   next: (data) => { this.currentAds = data},
+    //   complete: () => {this.adsExist = false},
+    //   error: (err) => {this.adsExist = false}
+    // })
+    this.productsService.getAllProducts().subscribe(prods => {
+      this.productList = prods;
+      this.allProd = prods;
+    })
+  }
+  setId(id: number): void {
+    this.currentId = id;
+  }
+  DeleteProduct(id: any): void {
+    this.productsService.removeProduct(id).subscribe(prod => {
+      console.log('done');
+    })
+
+    //delete from prodarr
+    this.productList=this.productList.filter(prod => prod.id != id);
+    this.allProd = this.allProd.filter(prod => prod.id !== id)
+  }
+
+  // ngOnDestroy(): void {
+  //     this.adsObserver.unsubscribe();
+  // }
+
 }

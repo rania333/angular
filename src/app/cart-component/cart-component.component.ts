@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ProductsComponent } from '../products/products.component';
+import { CategoriesService } from '../services/categories.service';
 import { ICartItems } from '../viewmodels/icart-items';
 import { ICategory } from './../viewmodels/icategory';
 
@@ -9,7 +10,7 @@ import { ICategory } from './../viewmodels/icategory';
   styleUrls: ['./cart-component.component.scss']
 })
 export class CartComponentComponent implements OnInit, AfterViewInit {
-  categories: ICategory[];
+  categories: ICategory[] = [];
   selectCatID: number= 0; //two way bindng
   products: ICartItems[];
   totalOrderPrice: number = 0;
@@ -18,9 +19,9 @@ export class CartComponentComponent implements OnInit, AfterViewInit {
   orderQnt: number = 0;
   //viewChilds
   @ViewChild(ProductsComponent) prodFromProductsCom !: ProductsComponent;
-  constructor() {
-    this.categories = [{id: 1, name:'category1'},
-    {id: 2, name:'category2'}, {id: 3, name:'category3'}]
+  constructor(private catService: CategoriesService) {
+    // this.categories = [{id: 1, name:'category1'},
+    // {id: 2, name:'category2'}, {id: 3, name:'category3'}]
     this.products = [];
   }
   ngAfterViewInit(): void {
@@ -59,5 +60,8 @@ export class CartComponentComponent implements OnInit, AfterViewInit {
     this.products = this.products.filter(p => {p.productName != order.productName})
   }
   ngOnInit(): void {
+    this.catService.getAllCategories().subscribe(cats => {
+      this.categories = cats;
+    })
   }
 }

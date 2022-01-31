@@ -1,0 +1,16 @@
+{
+  "products": [
+    {"id": 2, "name": "product2", "quantity": 5,
+      "price": 200, "img": "https://picsum.photos/150/100/", "catID": 3
+    },
+    {"id": 3, "name": "product3", "quantity": 4,
+      "price": 150, "img": "https://picsum.photos/150/100/", "catID": 1
+    },
+    {"id": 5, "name": "product5", "quantity": 4,
+      "price": 150, "img": "https://picsum.photos/150/100/", "catID": 2
+    },
+    {"id": 6, "name": "product6", "quantity": 0,
+      "price": 150, "img": "https://picsum.photos/150/100/", "catID": 2
+    }
+  ]
+}
