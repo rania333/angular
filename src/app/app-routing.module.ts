@@ -8,6 +8,7 @@ import { EditProdComponentComponent } from './edit-prod-component/edit-prod-comp
 import { NotFoundComponentComponent } from './not-found-component/not-found-component.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './guards/auth.guard';
+import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
   {path: '', redirectTo: '/products', pathMatch: 'full'},
@@ -18,6 +19,9 @@ const routes: Routes = [
   {path: 'addProd', component: EditProdComponentComponent},
   {path: 'editProd/:id', component: EditProdComponentComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'signup', component: SignupComponent},
+  {path:'user', loadChildren: () => import('../app/models/user/user.module')
+  .then(m => m.UserModule) },
   {path: '**', component: NotFoundComponentComponent}
 ];
 

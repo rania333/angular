@@ -1,0 +1,125 @@
+<div class="container">
+  <form class="m-3 col-8 mx-auto p-3 shadow-lg p-3 mb-5 bg-body rounded "
+  [formGroup]="signupForm" (submit)="submitHandler()">
+    <div class="row mx-auto">
+      <h2 class='text-info text-center'>Registeration Form</h2>
+  </div>
+    <div class="mb-3 row">
+      <label for="name" class="form-label">FullName</label>
+      <input type="text" class="form-control" id="name"
+      name="name" formControlName='name'
+
+      >
+      <!-- [class.is-valid]="isValidControl('name')"
+      [class.is-invalid]="!isValidControl('name')" -->
+      <div class="alert alert-warning" *ngIf="isValidControl('name')">
+        <small *ngIf="errorType('name', 'required')">
+          Full Name is required
+        </small>
+        <small *ngIf="errorType('name','minlength')" >
+          Full name must be 5 letters at least,
+        </small>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input type="email" class="form-control" id="email"
+      formControlName='email'>
+      <div class="alert alert-warning" *ngIf="isValidControl('email')">
+        <small *ngIf="errorType('email', 'required')">
+          Email is required
+        </small>
+        <!-- <small *ngIf="errorType('email', 'existMail')">
+          This Email is already exist
+        </small> -->
+        <small *ngIf="errorType('email', 'email')">
+          invalid email format
+        </small>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="pass" class="form-label">Password</label>
+      <input type="password"
+      class="form-control" id="pass" formControlName='pass'>
+      <div class="alert alert-warning" *ngIf="isValidControl('pass')" >
+        <small *ngIf="errorType('pass', 'required')">
+          Password is required
+        </small>
+        <small *ngIf="errorType('pass', 'pattern')">
+          Password should have at least one upperCase, letterCase, digit, specialCharacter
+        </small>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="pass2" class="form-label">Confirm Password</label>
+      <input type="password" class="form-control" id="pass2"
+      formControlName='pass2'>
+        <div class="alert alert-warning" *ngIf="isValidControl('pass2')">
+          <small *ngIf="errorType('pass2', 'required')">
+            Confirm Password is required
+          </small>
+          <small *ngIf="errorType('pass2', 'pattern')">
+            Confirm Password should have at least one upperCase, letterCase, digit, specialCharacter
+          </small>
+        </div>
+        <small class="alert alert-warning"
+        *ngIf="signupForm.errors?.['notEqual']">
+          Confirm password must match password.
+        </small>
+      </div>
+      <!-- </div> -->
+    <div class="text-danger">
+      {{signupForm.value.phone | json}}
+    </div>
+      <div class="mb-3 ms-3" formArrayName="phone"
+      *ngFor=" let phone of phones.controls; let i=index">
+        <label for="{{'phone-'+i}}" class="form-label">Phone No. #{{i+1}}</label>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" id="{{'phone-'+i}}"
+        [formControlName]='i'>
+          <button type="button" class="btn btn-primary mx-1"
+          [disabled]="phones.value.length <= 1"
+          (click)="removePhone(i)"> - </button>
+          <button type="button" class="btn btn-primary"
+          (click)="addPhone()" [disabled]="!phone.dirty || phone.errors?.['pattern']"> + </button>
+        </div>
+        <!-- {{"err "+ phone.errors?.['pattern']}} -->
+        <!-- <div class="alert alert-warning" *ngIf="isValidControl('phone')">
+          <small *ngIf="!errorType('phone', 'required')">
+            Phone Number is required
+          </small>
+          <small *ngIf="!errorType('phone', 'pattern')">
+            Invalid phone format(01(012)[0-9])
+          </small>
+        </div> -->
+      </div>
+
+
+    <div formGroupName="address">
+      <div class="mb-3">
+        <label for="city" class="form-label">City</label>
+        <input type="text" class="form-control" id="city"
+        formControlName="city">
+      </div>
+
+      <div class="mb-3">
+        <label for="code" class="form-label">Postal Code</label>
+        <input type="number" class="form-control" id="code"
+        formControlName="code">
+      </div>
+
+      <div class="mb-3">
+        <label for="street" class="form-label">Street</label>
+        <input type="text" class="form-control" id="street"
+        formControlName="st">
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary"
+    [disabled]="signupForm.invalid">Submit</button>
+  </form>
+  <hr>
+</div>
