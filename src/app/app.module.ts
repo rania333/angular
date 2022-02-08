@@ -7,7 +7,7 @@ import { HeaderComponent } from './header/header.component';
 import { ProductsComponent } from './products/products.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidemenuComponent } from './sidemenu/sidemenu.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductCardDirDirective } from './product-card-dir.directive';
 import { CustomPopePipe } from './custom-pope.pipe';
 import { CustomPipePipe } from './custom-pipe.pipe';
@@ -17,7 +17,10 @@ import { EditProdComponentComponent } from './edit-prod-component/edit-prod-comp
 import { ProductDetailsComponent } from './product-details/product-details.component';
 import { NotFoundComponentComponent } from './not-found-component/not-found-component.component';
 import { LoginComponent } from './login/login.component';
-import {HttpClientModule} from '@angular/common/http'
+import {HttpClientModule} from '@angular/common/http';
+import { SignupComponent } from './signup/signup.component';
+import { AddUserComponent } from './models/add-user/add-user.component';
+import { EditUserComponent } from './models/edit-user/edit-user.component'
 
 @NgModule({
   declarations: [
@@ -34,13 +37,16 @@ import {HttpClientModule} from '@angular/common/http'
     EditProdComponentComponent,
     ProductDetailsComponent,
     NotFoundComponentComponent,
-    LoginComponent
+    LoginComponent,
+    SignupComponent,
+
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
